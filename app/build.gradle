@@ -26,6 +26,8 @@ dependencies {
     implementation 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
     implementation 'com.github.bumptech.glide:glide:4.8.0'
     implementation 'com.just.agentweb:agentweb:4.0.3-beta'
+    implementation 'com.yanzhenjie:permission:1.1.0'
+    implementation 'com.yanzhenjie:album:2.0.0-alpha'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'

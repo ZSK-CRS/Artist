@@ -2,6 +2,7 @@ package com.mt.artist;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.Manifest;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -34,11 +35,15 @@ import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
 import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.PermissionNo;
+import com.yanzhenjie.permission.PermissionYes;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 
 
 import static android.view.KeyEvent.KEYCODE_BACK;
@@ -122,4 +127,38 @@ public class MainActivity extends AppCompatActivity {
         wxapi.registerApp(Contant.APPID_WECHAT);
     }
 
+
+    private void applyPermission() {
+        if (AndPermission.hasPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE
+                , Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA
+                , Manifest.permission.READ_PHONE_STATE, Manifest.permission.CALL_PHONE
+        )) {
+        } else {
+            // 申请权限。
+            AndPermission.with(this)
+                    .requestCode(100)
+                    .permission(Manifest.permission.WRITE_EXTERNAL_STORAGE
+                            , Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA
+                            , Manifest.permission.READ_PHONE_STATE, Manifest.permission.CALL_PHONE)
+                    .callback(this)
+                    .start();
+        }
+    }
+
+    // 成功回调的方法，用注解即可，里面的数字是请求时的requestCode。
+    @PermissionYes(100)
+    private void getMultiYes(List<String> grantedPermissions) {
+        // TODO 申请权限成功。
+
+    }
+
+    // 失败回调的方法，用注解即可，里面的数字是请求时的requestCode。
+    @PermissionNo(100)
+    private void getMultiNo(List<String> deniedPermissions) {
+        // 用户否勾选了不再提示并且拒绝了权限，那么提示用户到设置中授权。
+        if (AndPermission.hasAlwaysDeniedPermission(this, deniedPermissions)) {
+            // 第一种：用默认的提示语。
+            AndPermission.defaultSettingDialog(this, 100).show();
+        }
+    }
 }
